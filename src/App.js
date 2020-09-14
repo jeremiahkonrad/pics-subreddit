@@ -1,31 +1,28 @@
 /** @jsx jsx */
 // ^ enables emotion `css` syntax to be used
-import React from 'react';
+import { useEffect, useState } from 'react';
 import { Layout, Row, Col, List, Avatar } from 'antd';
 import { css, jsx } from '@emotion/core';
 import ImageDetail from './components/image-detail/image-detail';
+import { REDDIT_PICS_BASE_ENDPOINT } from './constants';
 
 import 'antd/dist/antd.css';
 import './App.css';
 
-const { Header, Footer, Content } = Layout;
-
-const tempListData = [
-  {
-    title: 'Pic Title 1',
-  },
-  {
-    title: 'Pic Title 2',
-  },
-  {
-    title: 'Pic Title 3',
-  },
-  {
-    title: 'Pic Title 4',
-  },
-];
+const { Header, Content } = Layout;
 
 const App = () => {
+  const [pics, setPics] = useState([]);
+
+  useEffect(() => {
+    fetch(`${REDDIT_PICS_BASE_ENDPOINT}?jsonp=`)
+      .then((response) => {
+        console.log(response);
+        return response.json();
+      })
+      .then((json) => setPics(json?.data?.children || []));
+  }, []);
+
   return (
     <div className="App">
       <Header
@@ -63,18 +60,20 @@ const App = () => {
                 margin: 1rem;
               `}
               itemLayout="horizontal"
-              dataSource={tempListData}
-              renderItem={(item) => (
-                <List.Item>
-                  <List.Item.Meta
-                    avatar={
-                      <Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />
-                    }
-                    title={<a href="https://ant.design">{item.title}</a>}
-                    description="Ant Design, a design language for background applications, is refined by Ant UED Team"
-                  />
-                </List.Item>
-              )}
+              dataSource={pics}
+              renderItem={(item) => {
+                console.log({ item });
+
+                const { thumbnail, title, url } = item?.data;
+                return (
+                  <List.Item>
+                    <List.Item.Meta
+                      avatar={<Avatar src={thumbnail} />}
+                      title={title}
+                    />
+                  </List.Item>
+                );
+              }}
             />
           </Col>
         </Row>
