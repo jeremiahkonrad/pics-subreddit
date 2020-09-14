@@ -1,7 +1,7 @@
 /** @jsx jsx */
 // ^ enables emotion `css` syntax to be used
 import { useEffect, useState } from 'react';
-import { Layout, Row, Col, List, Avatar } from 'antd';
+import { Layout, Row, Col, List, Avatar, Button, Skeleton } from 'antd';
 import { css, jsx } from '@emotion/core';
 import ImageDetail from './components/image-detail/image-detail';
 import { REDDIT_PICS_BASE_ENDPOINT } from './constants';
@@ -12,16 +12,76 @@ import './App.css';
 const { Header, Content } = Layout;
 
 const App = () => {
+  const [initLoading, setInitLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [pics, setPics] = useState([]);
+  const [lastSeenHash, setLastSeenHash] = useState('');
+  const [fetchedData, setFetchedData] = useState([]);
+
+  const ITEM_FETCH_LIMIT = 10;
 
   useEffect(() => {
-    fetch(`${REDDIT_PICS_BASE_ENDPOINT}?jsonp=`)
+    initLoading &&
+      fetch(`${REDDIT_PICS_BASE_ENDPOINT}?jso np=&limit=${ITEM_FETCH_LIMIT}`)
+        .then((response) => {
+          return response.json();
+        })
+        .then((json) => {
+          const data = json?.data || {};
+          setInitLoading(false);
+          setPics(data?.children);
+          setFetchedData(data?.children);
+          // reddit api passes us a value to help keep track of the next page of items
+          setLastSeenHash(data?.after);
+        });
+  }, [initLoading]);
+
+  const onLoadMore = () => {
+    setIsLoading(true);
+    setPics(
+      // prefill the acting array of pics with the expected return items, stubbing expected data
+      // these expectant data items will be rendered in a Skeleton state, by ANT design
+      pics.concat(
+        [...new Array(ITEM_FETCH_LIMIT)].map(() => ({
+          loading: true,
+          data: {
+            title: '',
+            thumbnail: '',
+          },
+        }))
+      )
+    );
+
+    fetch(
+      `${REDDIT_PICS_BASE_ENDPOINT}?jsonp=&limit=${ITEM_FETCH_LIMIT}&after=${lastSeenHash}&count=${pics.length}`
+    )
       .then((response) => {
-        console.log(response);
         return response.json();
       })
-      .then((json) => setPics(json?.data?.children || []));
-  }, []);
+      .then((json) => {
+        const fetchedPics = json?.data?.children || [];
+        const latestData = [...fetchedData, ...fetchedPics];
+
+        setFetchedData(latestData);
+        setPics(latestData);
+        setLastSeenHash(json?.data?.after);
+        setIsLoading(false);
+      });
+  };
+
+  const loadMore =
+    !initLoading && !isLoading ? (
+      <div
+        style={{
+          textAlign: 'center',
+          marginTop: 12,
+          height: 32,
+          lineHeight: '32px',
+        }}
+      >
+        <Button onClick={onLoadMore}>loading more</Button>
+      </div>
+    ) : null;
 
   return (
     <div className="App">
@@ -56,21 +116,27 @@ const App = () => {
           <Col span={24} md={{ span: 12, pull: 12 }}>
             <List
               css={css`
-                min-height: 100vh;
                 margin: 1rem;
               `}
               itemLayout="horizontal"
               dataSource={pics}
+              loadMore={loadMore}
               renderItem={(item) => {
-                console.log({ item });
+                const { thumbnail, title } = item?.data; // we have url too
 
-                const { thumbnail, title, url } = item?.data;
                 return (
                   <List.Item>
-                    <List.Item.Meta
-                      avatar={<Avatar src={thumbnail} />}
-                      title={title}
-                    />
+                    <Skeleton
+                      avatar
+                      title={false}
+                      loading={item.loading}
+                      active
+                    >
+                      <List.Item.Meta
+                        avatar={<Avatar src={thumbnail} />}
+                        title={title}
+                      />
+                    </Skeleton>
                   </List.Item>
                 );
               }}
