@@ -5,6 +5,7 @@ import { css, jsx } from '@emotion/core';
 const imageDetailStyles = css`
   display: flex;
   flex-direction: column;
+  align-items: center;
   text-align: center;
 
   @media (min-width: 768px) {
@@ -83,6 +84,7 @@ const frameStyles = css`
     right: -2.5vmin;
     top: -2.5vmin;
   }
+  max-width: 400px;
 `;
 
 export default ImageDetail;
