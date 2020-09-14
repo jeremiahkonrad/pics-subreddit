@@ -17,12 +17,13 @@ const App = () => {
   const [pics, setPics] = useState([]);
   const [lastSeenHash, setLastSeenHash] = useState('');
   const [fetchedData, setFetchedData] = useState([]);
+  const [selectedImage, setSelectedImage] = useState(null);
 
   const ITEM_FETCH_LIMIT = 10;
 
   useEffect(() => {
     initLoading &&
-      fetch(`${REDDIT_PICS_BASE_ENDPOINT}?jso np=&limit=${ITEM_FETCH_LIMIT}`)
+      fetch(`${REDDIT_PICS_BASE_ENDPOINT}?jsonp=&limit=${ITEM_FETCH_LIMIT}`)
         .then((response) => {
           return response.json();
         })
@@ -83,6 +84,8 @@ const App = () => {
       </div>
     ) : null;
 
+  const handleImageClick = (item) => setSelectedImage(item);
+
   return (
     <div className="App">
       <Header
@@ -110,7 +113,7 @@ const App = () => {
                 top: 64px;
               `}
             >
-              <ImageDetail />
+              <ImageDetail image={selectedImage} />
             </div>
           </Col>
           <Col span={24} md={{ span: 12, pull: 12 }}>
@@ -123,9 +126,15 @@ const App = () => {
               loadMore={loadMore}
               renderItem={(item) => {
                 const { thumbnail, title } = item?.data; // we have url too
-
                 return (
-                  <List.Item>
+                  <List.Item
+                    onClick={() => {
+                      handleImageClick(item.data);
+                    }}
+                    css={css`
+                      cursor: pointer;
+                    `}
+                  >
                     <Skeleton
                       avatar
                       title={false}

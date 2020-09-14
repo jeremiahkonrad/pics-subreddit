@@ -5,9 +5,18 @@ import { css, jsx } from '@emotion/core';
 const imageDetailStyles = css`
   display: flex;
   flex-direction: column;
+  text-align: center;
 
   @media (min-width: 768px) {
     max-height: none;
+  }
+
+  h1 {
+    font-family: 'Times New Roman', Serif;
+    font-size: 2.5rem;
+    font-weight: bold;
+    line-height: 100%;
+    margin: 0 0 1rem;
   }
 `;
 
@@ -21,15 +30,17 @@ const imageStyles = css`
   max-width: 100%;
 `;
 
-const ImageDetail = () => (
-  <div css={imageDetailStyles}>
-    <h3>Detail of image</h3>
-    <div css={frameStyles}>
-      <img css={imageStyles} src="https://placekitten.com/g/200/300" />
+const ImageDetail = ({ image }) => {
+  return (
+    <div css={imageDetailStyles}>
+      <div css={frameStyles}>
+        {image && <img css={imageStyles} src={image?.url} />}
+      </div>
+      <h1>{image?.title || '[select an image]'}</h1>
+      <p>{image?.author}</p>
     </div>
-    <p>metadata for image</p>
-  </div>
-);
+  );
+};
 
 /**
  * Original frame style from here: https://codepen.io/chris22smith/pen/PbBwjp
@@ -47,7 +58,7 @@ const frameStyles = css`
     0 5px 10px 5px rgba(0, 0, 0, 0.25);
   box-sizing: border-box;
   display: inline-block;
-  margin: 10vh 10vw;
+  margin: 10vh 10vw 5vh;
   // height: 80vh;
   padding: 8vmin;
   position: relative;
