@@ -41,12 +41,22 @@ const App = () => {
             color: white;
           `}
         >
-          Scroll to find an interesting picture, click it to learn more!
+          /pics
         </h2>
       </Header>
       <Content>
         <Row>
-          <Col span={12}>
+          <Col span={24} md={{ span: 12, push: 12 }}>
+            <div
+              css={css`
+                position: sticky;
+                top: 64px;
+              `}
+            >
+              <ImageDetail />
+            </div>
+          </Col>
+          <Col span={24} md={{ span: 12, pull: 12 }}>
             <List
               css={css`
                 min-height: 100vh;
@@ -66,16 +76,6 @@ const App = () => {
                 </List.Item>
               )}
             />
-          </Col>
-          <Col span={12}>
-            <div
-              css={css`
-                position: sticky;
-                top: 64px;
-              `}
-            >
-              <ImageDetail />
-            </div>
           </Col>
         </Row>
       </Content>
