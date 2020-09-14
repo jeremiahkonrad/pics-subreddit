@@ -1,27 +1,27 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "7cb9a8ce961f8079b347d1890cead29f",
+    "revision": "99d229b3fd4efb52e9e62984b8a15061",
     "url": "/pics-subreddit/index.html"
   },
   {
-    "revision": "f244ff0fc2371e7b066b",
+    "revision": "49032ce885d1337eb54e",
     "url": "/pics-subreddit/static/css/2.99a5358a.chunk.css"
   },
   {
-    "revision": "a5a09a025059f3013068",
+    "revision": "b0ed4a0b79d561ffa72b",
     "url": "/pics-subreddit/static/css/main.27fd15f6.chunk.css"
   },
   {
-    "revision": "f244ff0fc2371e7b066b",
-    "url": "/pics-subreddit/static/js/2.8dbbe7d4.chunk.js"
+    "revision": "49032ce885d1337eb54e",
+    "url": "/pics-subreddit/static/js/2.0a096575.chunk.js"
   },
   {
     "revision": "3453b8997016469371284a28c0e873e2",
-    "url": "/pics-subreddit/static/js/2.8dbbe7d4.chunk.js.LICENSE.txt"
+    "url": "/pics-subreddit/static/js/2.0a096575.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "a5a09a025059f3013068",
-    "url": "/pics-subreddit/static/js/main.86ddd0b8.chunk.js"
+    "revision": "b0ed4a0b79d561ffa72b",
+    "url": "/pics-subreddit/static/js/main.a9f0f80d.chunk.js"
   },
   {
     "revision": "378219d530ea39640ef3",
