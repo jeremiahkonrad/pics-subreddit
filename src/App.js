@@ -1,16 +1,31 @@
 /** @jsx jsx */
 // ^ enables emotion `css` syntax to be used
 import React from 'react';
-import { Layout, Row, Col } from 'antd';
+import { Layout, Row, Col, List, Avatar } from 'antd';
 import { css, jsx } from '@emotion/core';
+import ImageDetail from './components/image-detail/image-detail';
 
-import logo from './logo.svg';
 import 'antd/dist/antd.css';
 import './App.css';
 
 const { Header, Footer, Content } = Layout;
 
-function App() {
+const tempListData = [
+  {
+    title: 'Pic Title 1',
+  },
+  {
+    title: 'Pic Title 2',
+  },
+  {
+    title: 'Pic Title 3',
+  },
+  {
+    title: 'Pic Title 4',
+  },
+];
+
+const App = () => {
   return (
     <div className="App">
       <Header
@@ -32,18 +47,25 @@ function App() {
       <Content>
         <Row>
           <Col span={12}>
-            <header className="App-header">
-              <img src={logo} className="App-logo" alt="logo" />
-              <p>Let's list the images here</p>
-              <a
-                className="App-link"
-                href="https://reactjs.org"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Learn React
-              </a>
-            </header>
+            <List
+              css={css`
+                min-height: 100vh;
+                margin: 1rem;
+              `}
+              itemLayout="horizontal"
+              dataSource={tempListData}
+              renderItem={(item) => (
+                <List.Item>
+                  <List.Item.Meta
+                    avatar={
+                      <Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />
+                    }
+                    title={<a href="https://ant.design">{item.title}</a>}
+                    description="Ant Design, a design language for background applications, is refined by Ant UED Team"
+                  />
+                </List.Item>
+              )}
+            />
           </Col>
           <Col span={12}>
             <div
@@ -52,14 +74,13 @@ function App() {
                 top: 64px;
               `}
             >
-              Details
+              <ImageDetail />
             </div>
           </Col>
         </Row>
       </Content>
-      <Footer>a /pics browser</Footer>
     </div>
   );
-}
+};
 
 export default App;
