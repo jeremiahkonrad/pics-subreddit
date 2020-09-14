@@ -1,3 +1,14 @@
+## /Pics Subreddit Browser
+
+View recent /pics!
+
+To run locally:
+
+1. Clone repo
+2. cd to /pics-subreddit
+3. `npm install`
+4. `npm start`
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
