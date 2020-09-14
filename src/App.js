@@ -1,7 +1,7 @@
 /** @jsx jsx */
 // ^ enables emotion `css` syntax to be used
 import { useEffect, useState } from 'react';
-import { Layout, Row, Col, List, Avatar, Button, Skeleton } from 'antd';
+import { Layout, Row, Col, List, Avatar, Button, Skeleton, Input } from 'antd';
 import { css, jsx } from '@emotion/core';
 import ImageDetail from './components/image-detail/image-detail';
 import { REDDIT_PICS_BASE_ENDPOINT } from './constants';
@@ -18,6 +18,7 @@ const App = () => {
   const [lastSeenHash, setLastSeenHash] = useState('');
   const [fetchedData, setFetchedData] = useState([]);
   const [selectedImage, setSelectedImage] = useState(null);
+  const [currentFilter, setCurrentFilter] = useState(null);
 
   const ITEM_FETCH_LIMIT = 10;
 
@@ -86,6 +87,7 @@ const App = () => {
 
   const handleImageClick = (item) => setSelectedImage(item);
 
+  console.log({ currentFilter });
   return (
     <div className="App">
       <Header
@@ -117,12 +119,24 @@ const App = () => {
             </div>
           </Col>
           <Col span={24} md={{ span: 12, pull: 12 }}>
+            <Input
+              placeholder={`filter titles (${pics.length})`}
+              onChange={(e) => setCurrentFilter(e.target.value)}
+            />
             <List
               css={css`
                 margin: 1rem;
               `}
               itemLayout="horizontal"
-              dataSource={pics}
+              dataSource={
+                currentFilter
+                  ? pics.filter((elem) => {
+                      return elem?.data?.title
+                        .toLowerCase()
+                        .includes(currentFilter);
+                    })
+                  : pics
+              }
               loadMore={loadMore}
               renderItem={(item) => {
                 const { thumbnail, title } = item?.data; // we have url too
