@@ -87,7 +87,6 @@ const App = () => {
 
   const handleImageClick = (item) => setSelectedImage(item);
 
-  console.log({ currentFilter });
   return (
     <div className="App">
       <Header
