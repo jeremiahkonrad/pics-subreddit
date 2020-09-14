@@ -5,6 +5,10 @@ import { css, jsx } from '@emotion/core';
 const imageDetailStyles = css`
   display: flex;
   flex-direction: column;
+
+  @media (min-width: 768px) {
+    max-height: none;
+  }
 `;
 
 const imageStyles = css`
